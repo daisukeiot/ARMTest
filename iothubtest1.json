@@ -27,7 +27,7 @@
         },
         "locations": {
             "type": "array",
-            "defaultValue": [
+            "allowedValues": [
                 "East Asia",
                 "Southeast Asia",
                 "East US",
