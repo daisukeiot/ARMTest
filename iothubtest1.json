@@ -25,19 +25,13 @@
                 "description": "Specifies the number of provisioned IoT Hub units. Restricted to 1 unit for the F1 SKU. Can be set up to maximum number allowed for subscription."
             }
         },
-        "locations": {
-            "type": "array",
-            "allowedValues": [
-                "East Asia",
-                "Southeast Asia",
-                "East US",
-                "West US",
-                "West Europe"
-            ],
-            "metadata": {
-                "description": "Locations"
-            }
-        }
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "The region where resources are deployed"
+      },
+      "defaultValue": "[resourceGroup().location]"
+    }
     },
     "variables": {
         "consumerGroupName": "[concat(parameters('iotHubName'), '/events/cg1')]"
@@ -47,7 +41,7 @@
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2018-04-01",
             "name": "[parameters('iotHubName')]",
-            "location": "[parameters('locations')[copyIndex()]]",
+            "location": "[parameters('location')]",
             "properties": {
                 "eventHubEndpoints": {
                     "events": {
