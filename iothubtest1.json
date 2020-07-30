@@ -34,7 +34,7 @@
     },
     "variables": {
         "consumerGroupName": "[concat(parameters('iotHubName'), '/events/telemetry-cg')]",
-        "IoTHubSetting": {
+        "IoTHubSKU": {
             "F1": {
                 "IoTHubSKU": "F1",
                 "partitionCount": 2
@@ -55,7 +55,7 @@
                 "ENV": "P15"
             },
             "sku": {
-                "name": "[variables('IoTHubSetting')[parameters('IoTHubSetting')].IoTHubSKU]",
+                "name": "[variables('IoTHubSKU')[parameters('IoTHubSKU')].IoTHubSKU]",
                 "tier": "Standard",
                 "capacity": 1
             },
@@ -67,7 +67,7 @@
                 "eventHubEndpoints": {
                     "events": {
                         "retentionTimeInDays": 1,
-                        "partitionCount": "[variables('IoTHubSetting')[parameters('IoTHubSetting')].partitionCount]"
+                        "partitionCount": "[variables('IoTHubSKU')[parameters('IoTHubSKU')].partitionCount]"
                     }
                 },
                 "routing": {
