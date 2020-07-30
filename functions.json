@@ -25,7 +25,7 @@
         },
         "repoURL": {
             "type": "string",
-            "defaultValue": "https://github.com/daisukeiot/Hackathon2020-Telemetry-Processor.git",
+            "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
             "metadata": {
                 "description": "The URL for the GitHub repository that contains the project to deploy."
             }
