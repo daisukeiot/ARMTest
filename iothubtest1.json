@@ -114,7 +114,7 @@
             },
             "sku": {
                 "name": "[parameters('skuName')]",
-                "capacity": "[parameters('capacityUnits')]"
+                "capacity": "1"
             }
         },
         {
