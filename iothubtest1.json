@@ -12,6 +12,10 @@
         "skuName": {
             "type": "string",
             "defaultValue": "S1",
+            "allowedValues": [
+                "F1",
+                "S1"
+            ],
             "metadata": {
                 "description": "Specifies the IotHub SKU."
             }
