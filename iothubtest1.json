@@ -5,18 +5,22 @@
         "location": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
+            "allowedValues": [
+                "centralus",
+                "eastjapan"
+            ],
             "metadata": {
                 "description": "Location for all resources."
             }
         },
-        "iotHubName": {
+        "IoTHubName": {
             "type": "string",
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
             },
             "defaultValue": "[concat(resourceGroup().name, '-Hub')]"
         },
-        "IoT Hub SKU": {
+        "IoTHubSKU": {
             "type": "string",
             "defaultValue": "S1",
             "allowedValues": [
@@ -32,11 +36,11 @@
         "consumerGroupName": "[concat(parameters('iotHubName'), '/events/telemetry-cg')]",
         "IoTHubSetting": {
             "F1": {
-                "iothubsku": "F1",
+                "IoTHubSKU": "F1",
                 "partitionCount": 2
             },
             "S1": {
-                "iothubsku": "S1",
+                "IoTHubSKU": "S1",
                 "partitionCount": 4
             }
         }
@@ -51,7 +55,7 @@
                 "ENV": "P15"
             },
             "sku": {
-                "name": "[variables('IoTHubSetting')[parameters('IoTHub Setting')].iothubsku]",
+                "name": "[variables('IoTHubSetting')[parameters('IoTHubSetting')].IoTHubSKU]",
                 "tier": "Standard",
                 "capacity": 1
             },
@@ -63,7 +67,7 @@
                 "eventHubEndpoints": {
                     "events": {
                         "retentionTimeInDays": 1,
-                        "partitionCount": "[variables('IoTHubSetting')[parameters('IoTHub Setting')].partitionCount]"
+                        "partitionCount": "[variables('IoTHubSetting')[parameters('IoTHubSetting')].partitionCount]"
                     }
                 },
                 "routing": {
