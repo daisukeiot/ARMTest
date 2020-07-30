@@ -21,7 +21,7 @@
             "metadata": {
                 "description": "The name of Storage Account.  Must be globally unique."
             },
-            "defaultValue": "[concat(resourceGroup().name', 'stor', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat(resourceGroup().name, 'stor', uniqueString(resourceGroup().id))]"
         },
         "repoURL": {
             "type": "string",
