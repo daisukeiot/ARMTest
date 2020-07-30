@@ -18,7 +18,7 @@
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
             },
-            "defaultValue": "[concat(resourceGroup().name, '-Hub')]"
+            "defaultValue": "[concat(resourceGroup().name, '-Hub-', uniqueString(resourceGroup().id))]"
         },
         "IoTHubSKU": {
             "type": "string",
