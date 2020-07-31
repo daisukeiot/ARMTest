@@ -297,7 +297,7 @@
             },
             "kind": "SignalR",
             "properties": {
-                "hostNamePrefix": "[toLower(variables('signalrName')]",
+                "hostNamePrefix": "[toLower(variables('signalrName'))]",
                 "features": [
                     {
                         "flag": "ServiceMode",
