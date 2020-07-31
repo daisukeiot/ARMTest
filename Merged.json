@@ -116,7 +116,7 @@
         "hostingPlanName": "[parameters('HostingPlanName')]",
         "storageAccountName": "[parameters('StorageAccountName')]",
         "signalrName": "[parameters('SignalrName')]",
-        "portalSiteName" : "[parameters('PortalSiteName')]"
+        "portalSiteName": "[parameters('PortalSiteName')]"
     },
     "resources": [
         {
@@ -361,9 +361,12 @@
         },
         {
             "apiVersion": "2015-08-01",
-            "name": "[parameters('siteName')]",
+            "name": "[variables('portalSiteName')]",
             "type": "Microsoft.Web/sites",
-            "location": "[parameters('location')]",
+            "tags": {
+                "ENV": "P15"
+            },
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
@@ -388,7 +391,40 @@
                     }
                 }
             ]
-        }
+        },
+        {
+            "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[concat(variables('iotHubEventGridTopic'), '/PortalIoTHubEventSubscription')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
+                "[resourceId('Microsoft.EventGrid/systemTopics', variables('portalSiteName'))]"
+            ],
+            "properties": {
+                "destination": {
+                    "properties": {
+                        "maxEventsPerBatch": 1,
+                        "preferredBatchSizeInKilobytes": 64,
+                        "endpointUrl": "[concat('https://',  variables('portalSiteName'),'.azurewebsites.net/api/eventgrid']"
+                    },
+                    "endpointType": "WebHook"
+                },
+                "filter": {
+                    "includedEventTypes": [
+                        "Microsoft.Devices.DeviceCreated",
+                        "Microsoft.Devices.DeviceDeleted",
+                        "Microsoft.Devices.DeviceConnected",
+                        "Microsoft.Devices.DeviceDisconnected"
+                    ]
+                },
+                "labels": [],
+                "eventDeliverySchema": "EventGridSchema",
+                "retryPolicy": {
+                    "maxDeliveryAttempts": 30,
+                    "eventTimeToLiveInMinutes": 1440
+                }
+            }
+        },
     ],
     "outputs": {
         "iothub": {
