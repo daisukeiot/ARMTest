@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "IotHubName": {
-            "defaultValue": "[concat('Hub-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('Hub-', take(uniqueString(resourceGroup().id),5)]",
             "type": "String",
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
@@ -33,7 +33,7 @@
             }
         },
         "PortalSiteName": {
-            "defaultValue": "[concat('Portal-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
             "type": "String",
             "metadata": {
                 "description": "The name of Portal.  Must be globally unique."
@@ -54,21 +54,21 @@
             }
         },
         "FunctionsName": {
-            "defaultValue": "[concat('Functions-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('Functions-', take(uniqueString(resourceGroup().id),5)]",
             "type": "String",
             "metadata": {
                 "description": "The name of Azure Functions.  Must be globally unique."
             }
         },
         "HostingPlanName": {
-            "defaultValue": "[concat('HostingPlan-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('HostingPlan-', take(uniqueString(resourceGroup().id),5)]",
             "type": "String",
             "metadata": {
                 "description": "The name of Hosting Plan.  Must be globally unique."
             }
         },
         "StorageAccountName": {
-            "defaultValue": "[toLower(concat('stor', uniqueString(resourceGroup().id)))]",
+            "defaultValue": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5))]",
             "type": "String",
             "metadata": {
                 "description": "The name of Storage Account.  Must be globally unique."
@@ -89,7 +89,7 @@
             }
         },
         "SignalrName": {
-            "defaultValue": "[concat('SignalR-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('SignalR-', take(uniqueString(resourceGroup().id),5)]",
             "type": "String",
             "metadata": {
                 "description": "The name of SignalR.  Must be globally unique."
