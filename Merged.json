@@ -2,14 +2,14 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "IoTHub_Name": {
+        "IotHubName": {
             "type": "string",
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
             },
             "defaultValue": "[concat(resourceGroup().name, '-Hub-', uniqueString(resourceGroup().id))]"
         },
-        "IoTHubSKU": {
+        "IotHubSKU": {
             "type": "string",
             "defaultValue": "S1",
             "allowedValues": [
@@ -20,35 +20,35 @@
                 "description": "IoT Hub SKU."
             }
         },
-        "Functions_Name": {
+        "FunctionsName": {
             "type": "string",
             "metadata": {
                 "description": "The name of Azure Functions.  Must be globally unique."
             },
             "defaultValue": "[concat(resourceGroup().name, '-Functions-', uniqueString(resourceGroup().id))]"
         },
-        "Hosting_Plan_Name": {
+        "HostingPlanName": {
             "type": "string",
             "metadata": {
                 "description": "The name of Hosting Plan.  Must be globally unique."
             },
             "defaultValue": "[concat(resourceGroup().name, '-HostingPlan-', uniqueString(resourceGroup().id))]"
         },
-        "Storage_Account_Name": {
+        "StorageAccountName": {
             "type": "string",
             "metadata": {
                 "description": "The name of Storage Account.  Must be globally unique."
             },
             "defaultValue": "[toLower(concat(resourceGroup().name, 'stor', uniqueString(resourceGroup().id)))]"
         },
-        "repoURL": {
+        "RepoURL": {
             "type": "string",
             "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
             "metadata": {
                 "description": "The URL for the GitHub repository that contains the project to deploy."
             }
         },
-        "branch": {
+        "Branch": {
             "type": "string",
             "defaultValue": "master",
             "metadata": {
@@ -57,8 +57,8 @@
         }
     },
     "variables": {
-        "consumerGroupName": "[concat(parameters('IoTHub_Name'), '/events/telemetry-cg')]",
-        "IoTHubSKU": {
+        "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
+        "IotHubSKU": {
             "F1": {
                 "SkuName": "F1",
                 "partitionCount": 2
@@ -68,11 +68,11 @@
                 "partitionCount": 4
             }
         },
-        "iotHubName": "[parameters('IoTHub_Name')]",
+        "iotHubName": "[parameters('IotHubName')]",
         "iotHubPolicyName": "iothubowner",
-        "functionAppName": "[parameters('Functions_Name')]",
-        "hostingPlanName": "[parameters('Hosting_Plan_Name')]",
-        "storageAccountName": "[parameters('Storage_Account_Name')]"
+        "functionAppName": "[parameters('FunctionsName')]",
+        "hostingPlanName": "[parameters('HostingPlanName')]",
+        "storageAccountName": "[parameters('StorageAccountName')]"
     },
     "resources": [
         {
@@ -84,7 +84,7 @@
                 "ENV": "P15"
             },
             "sku": {
-                "name": "[variables('IoTHubSKU')[parameters('IoTHubSKU')].SkuName]",
+                "name": "[variables('IotHubSKU')[parameters('IotHubSKU')].SkuName]",
                 "tier": "Standard",
                 "capacity": 1
             },
@@ -96,7 +96,7 @@
                 "eventHubEndpoints": {
                     "events": {
                         "retentionTimeInDays": 1,
-                        "partitionCount": "[variables('IoTHubSKU')[parameters('IoTHubSKU')].partitionCount]"
+                        "partitionCount": "[variables('IotHubSKU')[parameters('IotHubSKU')].partitionCount]"
                     }
                 },
                 "routing": {
@@ -170,7 +170,7 @@
             "apiVersion": "2018-04-01",
             "name": "[variables('consumerGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Devices/IotHubs', parameters('IoTHub_Name'))]"
+                "[resourceId('Microsoft.Devices/IotHubs', parameters('IotHubName'))]"
             ]
         },
         {
@@ -260,8 +260,8 @@
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('repoURL')]",
-                        "branch": "[parameters('branch')]",
+                        "RepoUrl": "[parameters('RepoURL')]",
+                        "Branch": "[parameters('Branch')]",
                         "IsManualIntegration": true
                     }
                 }
