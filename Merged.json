@@ -398,7 +398,7 @@
             "name": "[concat(variables('iotHubEventGridTopic'), '/PortalIoTHubEventSubscription')]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
-                "[resourceId('Microsoft.EventGrid/systemTopics', variables('portalSiteName'))]"
+                "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
             ],
             "properties": {
                 "destination": {
