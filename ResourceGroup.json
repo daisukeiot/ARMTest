@@ -10,11 +10,11 @@
       },
       "rgLocation": {
         "type": "string",
-        "defaultValue": "centralus",
+        "defaultValue": "Central US",
         "allowedValues": [
-            "centralus",
-            "eastjapan",
-            "northeurope"
+            "Central US",
+            "Japan East",
+            "North Europe"
         ],
         "metadata": {
             "description": "Region"
