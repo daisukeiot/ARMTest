@@ -436,11 +436,15 @@
     "outputs": {
         "_Web_Site_Address": {
             "type": "String",
-            "value": "[concat('https://', variables('portalSiteName'), '.azurewebsites.net/')]"
+            "value": "[concat('https://',  variables('portalSiteName'),'.azurewebsites.net/')]"
         },
         "_IoT_Hub_Name": {
             "type": "String",
             "value": "[variables('iotHubName')]"
+        },
+        "_IoT_Hub_Connection_String": {
+            "type": "String",
+            "value": "[concat('HostName=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).hostName, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey)]"
         },
         "_Function_App_Name": {
             "type": "String",
