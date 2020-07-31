@@ -17,7 +17,7 @@
     },
     "variables": {
         "iotHubLocation": "[parameters('IotHubLocation')]",
-        "iotHubName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
+        "iotHubName":       "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
         "consumerGroupName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
         "iotHubEventGridTopic": "EventGridIoTHubTopic",
@@ -27,9 +27,9 @@
         "signalrName": "[concat('SignalR-', take(uniqueString(resourceGroup().id),5))]",
         "portalSiteName": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
         "PortalRepoURL": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
-        "PortalRepoBranch": "master",
-        "FunctionRepoURL": "https://github.com/daisukeiot/Solution-Template-Functions.git",
-        "FunctionRepoBranch": "master"
+        "PortalRepoBranch":"master",
+        "FunctionRepoURL":"https://github.com/daisukeiot/Solution-Template-Functions.git",
+        "FunctionRepoBranch":"master"
     },
     "resources": [
         {
@@ -235,8 +235,8 @@
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('FunctionRepoURL')]",
-                        "branch": "[parameters('FunctionRepoBranch')]",
+                        "RepoUrl": "[variables('FunctionRepoURL')]",
+                        "branch": "[variables('FunctionRepoBranch')]",
                         "IsManualIntegration": true
                     }
                 }
@@ -284,7 +284,7 @@
                 "ENV": "P15"
             },
             "properties": {
-                "serverFarmId": "[parameters('hostingPlanName')]",
+                "serverFarmId": "[variables('hostingPlanName')]",
                 "siteConfig": {
                     "webSocketsEnabled": true,
                     "appSettings": [
@@ -304,8 +304,8 @@
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('PortalRepoURL')]",
-                        "branch": "[parameters('PortalRepoBranch')]",
+                        "repoUrl": "[variables('PortalRepoURL')]",
+                        "branch": "[variables('PortalRepoBranch')]",
                         "IsManualIntegration": true
                     }
                 }
