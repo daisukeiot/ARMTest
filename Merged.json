@@ -251,20 +251,22 @@
                         "value": "[concat('Endpoint=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.endpoint, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey, ';EntityPath=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.path)]"
                     }
                 ]
-            }
-        },
-        {
-            "apiVersion": "2018-11-01",
-            "name": "web",
-            "type": "sourcecontrols",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "RepoUrl": "[parameters('RepoURL')]",
-                "Branch": "[parameters('Branch')]",
-                "IsManualIntegration": true
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2018-11-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "[parameters('RepoURL')]",
+                        "Branch": "[parameters('Branch')]",
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
         }
     ]
 }
