@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "IoTHubName": {
+        "IoTHub_Name": {
             "type": "string",
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
@@ -57,7 +57,7 @@
         }
     },
     "variables": {
-        "consumerGroupName": "[concat(parameters('iotHubName'), '/events/telemetry-cg')]",
+        "consumerGroupName": "[concat(parameters('IoTHub_Name'), '/events/telemetry-cg')]",
         "IoTHubSKU": {
             "F1": {
                 "SkuName": "F1",
@@ -68,6 +68,8 @@
                 "partitionCount": 4
             }
         },
+        "iotHubName" : "[parameters('IoTHub_Name')]",
+        "iotHubPolicyName" : "iothubowner",
         "functionAppName": "[parameters('Functions_Name')]",
         "hostingPlanName": "[parameters('Hosting_Plan_Name')]",
         "storageAccountName": "[parameters('Storage_Account_Name')]"
@@ -76,7 +78,7 @@
         {
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
-            "name": "[parameters('iotHubName')]",
+            "name": "[variables('iotHubName')]",
             "location": "[resourceGroup().location]",
             "tags": {
                 "ENV": "P15"
@@ -168,7 +170,7 @@
             "apiVersion": "2018-04-01",
             "name": "[variables('consumerGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Devices/IotHubs', parameters('iotHubName'))]"
+                "[resourceId('Microsoft.Devices/IotHubs', parameters('IoTHub_Name'))]"
             ]
         },
         {
@@ -245,7 +247,7 @@
                         },
                         {
                             "name": "EVENTHUB_CS",
-                            "value": "test"
+                            "value": "[concat('Endpoint=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName'))).eventHubEndpoints.events.endpoint,';EntityPath=',reference(resourceId('Microsoft.Devices/IoTHubs',variables('iotHubName'))).eventHubEndpoints.events.path,';SharedAccessKeyName=',variables('iotHubPolicyName'),';SharedAccessKey=',listKeys(resourceId('Microsoft.Devices/IotHubs/Iothubkeys', parameters('IoTHub_Name'),variables('iotHubPolicyName')), variables('iotHubApiVersion')).primaryKey)]"
                         }
                     ]
                 }
