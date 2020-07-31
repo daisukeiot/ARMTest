@@ -10,8 +10,14 @@
       },
       "rgLocation": {
         "type": "string",
+        "defaultValue": "centralus",
+        "allowedValues": [
+            "centralus",
+            "eastjapan",
+            "northeurope"
+        ],
         "metadata": {
-          "description": "Location for the resourceGroup"
+            "description": "Region"
         }
       }
     },
