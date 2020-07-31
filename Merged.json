@@ -87,10 +87,10 @@
                 "partitionCount": 4
             }
         },
-        "IotHubLocation" : "[parameters('IotHubLocation')]",
+        "IotHubLocation": "[parameters('IotHubLocation')]",
         "iotHubName": "[parameters('IotHubName')]",
         "iotHubPolicyName": "iothubowner",
-        "iotHubEventGridTopic" : "EventGridIoTHubTopic",
+        "iotHubEventGridTopic": "EventGridIoTHubTopic",
         "functionAppName": "[parameters('FunctionsName')]",
         "hostingPlanName": "[parameters('HostingPlanName')]",
         "storageAccountName": "[parameters('StorageAccountName')]",
@@ -200,6 +200,9 @@
             "apiVersion": "2020-04-01-preview",
             "name": "[variables('iotHubEventGridTopic')]",
             "location": "[variables('IotHubLocation')]",
+            "tags": {
+                "ENV": "P15"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
