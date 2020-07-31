@@ -7,7 +7,7 @@
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
             },
-            "defaultValue": "[concat(resourceGroup().name, '-Hub-', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('Hub-', uniqueString(resourceGroup().id))]"
         },
         "IotHubSKU": {
             "type": "string",
@@ -20,26 +20,38 @@
                 "description": "IoT Hub SKU."
             }
         },
+        "IotHubLocation": {
+            "type": "string",
+            "defaultValue": "Central US",
+            "allowedValues": [
+                "Central US",
+                "Japan East",
+                "North Europe"
+            ],
+            "metadata": {
+                "description": "Region"
+            }
+        },
         "FunctionsName": {
             "type": "string",
             "metadata": {
                 "description": "The name of Azure Functions.  Must be globally unique."
             },
-            "defaultValue": "[concat(resourceGroup().name, '-Functions-', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('Functions-', uniqueString(resourceGroup().id))]"
         },
         "HostingPlanName": {
             "type": "string",
             "metadata": {
                 "description": "The name of Hosting Plan.  Must be globally unique."
             },
-            "defaultValue": "[concat(resourceGroup().name, '-HostingPlan-', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('HostingPlan-', uniqueString(resourceGroup().id))]"
         },
         "StorageAccountName": {
             "type": "string",
             "metadata": {
                 "description": "The name of Storage Account.  Must be globally unique."
             },
-            "defaultValue": "[toLower(concat(resourceGroup().name, 'stor', uniqueString(resourceGroup().id)))]"
+            "defaultValue": "[toLower(concat('stor', uniqueString(resourceGroup().id)))]"
         },
         "RepoURL": {
             "type": "string",
@@ -60,7 +72,7 @@
             "metadata": {
                 "description": "The name of SignalR.  Must be globally unique."
             },
-            "defaultValue": "[concat(resourceGroup().name, '-SignalR-', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[concat('SignalR-', uniqueString(resourceGroup().id))]"
         }
     },
     "variables": {
@@ -75,6 +87,7 @@
                 "partitionCount": 4
             }
         },
+        "IotHubLocation" : "[parameters('IotHubLocation')]",
         "iotHubName": "[parameters('IotHubName')]",
         "iotHubPolicyName": "iothubowner",
         "functionAppName": "[parameters('FunctionsName')]",
@@ -87,7 +100,7 @@
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
             "name": "[variables('iotHubName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('IotHubLocation')]",
             "tags": {
                 "ENV": "P15"
             },
