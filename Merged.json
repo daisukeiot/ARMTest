@@ -32,6 +32,27 @@
                 "description": "Region"
             }
         },
+        "PortalSiteName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of Portal.  Must be globally unique."
+            },
+            "defaultValue": "[concat('Portal-', uniqueString(resourceGroup().id))]"
+        },
+        "PortalRepoURL": {
+            "type": "string",
+            "defaultValue": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
+            "metadata": {
+                "description": "The URL for the GitHub repository that contains the project to deploy."
+            }
+        },
+        "PortalRepoBranch": {
+            "type": "string",
+            "defaultValue": "master",
+            "metadata": {
+                "description": "The branch of the GitHub repository to use."
+            }
+        },
         "FunctionsName": {
             "type": "string",
             "metadata": {
@@ -53,14 +74,14 @@
             },
             "defaultValue": "[toLower(concat('stor', uniqueString(resourceGroup().id)))]"
         },
-        "RepoURL": {
+        "FunctionRepoURL": {
             "type": "string",
             "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
             "metadata": {
                 "description": "The URL for the GitHub repository that contains the project to deploy."
             }
         },
-        "Branch": {
+        "FunctionRepoBranch": {
             "type": "string",
             "defaultValue": "master",
             "metadata": {
@@ -94,7 +115,8 @@
         "functionAppName": "[parameters('FunctionsName')]",
         "hostingPlanName": "[parameters('HostingPlanName')]",
         "storageAccountName": "[parameters('StorageAccountName')]",
-        "signalrName": "[parameters('SignalrName')]"
+        "signalrName": "[parameters('SignalrName')]",
+        "portalSiteName" : "[parameters('PortalSiteName')]"
     },
     "resources": [
         {
@@ -236,14 +258,10 @@
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "S1",
-                "tier": "Standard",
-                "size": "S1",
-                "family": "S",
-                "capacity": 1
+                "capacity": 0
             },
             "properties": {
-                "workerSize": 0,
-                "numberOfWorkers": 1
+                "name": "[variables('hostingPlanName')]"
             }
         },
         {
@@ -304,8 +322,8 @@
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('RepoURL')]",
-                        "branch": "[parameters('Branch')]",
+                        "RepoUrl": "[parameters('FunctionRepoURL')]",
+                        "branch": "[parameters('FunctionRepoBranch')]",
                         "IsManualIntegration": true
                     }
                 }
@@ -340,6 +358,36 @@
                     ]
                 }
             }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('siteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[parameters('hostingPlanName')]",
+                "siteConfig": {
+                    "webSocketsEnabled": true
+                }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "[parameters('PortalRepoURL')]",
+                        "branch": "[parameters('PortalRepoBranch')]",
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
         }
     ],
     "outputs": {
