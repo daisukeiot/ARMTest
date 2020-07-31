@@ -33,7 +33,7 @@
             }
         },
         "PortalSiteName": {
-            "defaultValue": "[concat('Portal-', take(uniqueString(resourceGroup().id),5)))]",
+            "defaultValue": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
             "type": "String",
             "metadata": {
                 "description": "The name of Portal.  Must be globally unique."
@@ -68,7 +68,7 @@
             }
         },
         "StorageAccountName": {
-            "defaultValue": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5)))]",
+            "defaultValue": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5))]",
             "type": "String",
             "metadata": {
                 "description": "The name of Storage Account.  Must be globally unique."
