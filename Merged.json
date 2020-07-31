@@ -405,7 +405,7 @@
                     "properties": {
                         "maxEventsPerBatch": 1,
                         "preferredBatchSizeInKilobytes": 64,
-                        "endpointUrl": "[concat('https://',  variables('portalSiteName'),'.azurewebsites.net/api/eventgrid']"
+                        "endpointUrl": "[concat('https://',  variables('portalSiteName'),'.azurewebsites.net/api/eventgrid')]"
                     },
                     "endpointType": "WebHook"
                 },
