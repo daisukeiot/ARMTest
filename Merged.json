@@ -68,8 +68,8 @@
                 "partitionCount": 4
             }
         },
-        "iotHubName" : "[parameters('IoTHub_Name')]",
-        "iotHubPolicyName" : "iothubowner",
+        "iotHubName": "[parameters('IoTHub_Name')]",
+        "iotHubPolicyName": "iothubowner",
         "functionAppName": "[parameters('Functions_Name')]",
         "hostingPlanName": "[parameters('Hosting_Plan_Name')]",
         "storageAccountName": "[parameters('Storage_Account_Name')]"
@@ -231,25 +231,7 @@
                         "allowedOrigins": [
                             "*"
                         ]
-                    },
-                    "appSettings": [
-                        {
-                            "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~3"
-                        },
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';')]"
-                        },
-                        {
-                            "name": "AzureWebJobsDashboard",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';')]"
-                        },
-                        {
-                            "name": "EVENTHUB_CS",
-                            "value": "[concat('Endpoint=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.endpoint, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey, ';EntityPath=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.path)]"
-                                                }
-                    ]
+                    }
                 }
             },
             "resources": [
@@ -267,7 +249,7 @@
                         "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';')]",
                         "FUNCTIONS_EXTENSION_VERSION": "~3",
                         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-                        "EVENTHUB_CS": "test"
+                        "EVENTHUB_CS": "[concat('Endpoint=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.endpoint, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey, ';EntityPath=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.path)]"
                     }
                 },
                 {
