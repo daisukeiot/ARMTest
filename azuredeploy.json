@@ -16,9 +16,9 @@
         }
     },
     "variables": {
-        "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
         "iotHubLocation": "[parameters('IotHubLocation')]",
         "iotHubName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
+        "consumerGroupName": "[concat(variables('IotHubName'), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
         "iotHubEventGridTopic": "EventGridIoTHubTopic",
         "functionAppName": "[concat('Functions-', take(uniqueString(resourceGroup().id),5))]",
