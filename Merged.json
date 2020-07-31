@@ -260,7 +260,7 @@
                         },
                         {
                             "name": "AzureSignalRConnectionString",
-                            "value": "[concat('Endpoint=https://', variables('signalrName'), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
+                            "value": "[concat('Endpoint=https://', toLower(variables('signalrName')), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
                         }
                     ]
                 }
