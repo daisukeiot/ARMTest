@@ -108,7 +108,7 @@
                 "partitionCount": 4
             }
         },
-        "IotHubLocation": "[parameters('IotHubLocation')]",
+        "iotHubLocation": "[parameters('IotHubLocation')]",
         "iotHubName": "[parameters('IotHubName')]",
         "iotHubPolicyName": "iothubowner",
         "iotHubEventGridTopic": "EventGridIoTHubTopic",
@@ -123,7 +123,7 @@
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
             "name": "[variables('iotHubName')]",
-            "location": "[variables('IotHubLocation')]",
+            "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "P15"
             },
@@ -221,7 +221,7 @@
             "type": "Microsoft.EventGrid/systemTopics",
             "apiVersion": "2020-04-01-preview",
             "name": "[variables('iotHubEventGridTopic')]",
-            "location": "[variables('IotHubLocation')]",
+            "location": "[variables('iotHubLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
@@ -237,7 +237,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "name": "[variables('storageAccountName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "P15"
             },
@@ -251,7 +251,7 @@
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2019-08-01",
             "name": "[variables('hostingPlanName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "P15"
             },
@@ -268,7 +268,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
             "name": "[variables('functionAppName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('iotHubLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
@@ -333,7 +333,7 @@
             "type": "Microsoft.SignalRService/SignalR",
             "apiVersion": "2020-05-01",
             "name": "[variables('signalrName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "P15"
             },
@@ -363,7 +363,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2015-08-01",
             "name": "[variables('portalSiteName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[variables('iotHubLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
@@ -434,23 +434,23 @@
         }
     ],
     "outputs": {
-        "Web Site Address": {
+        "_Web_Site_Address": {
             "type": "String",
-            "value": "[concat('https://',  variables('portalSiteName'),'.azurewebsites.net/')]"
+            "value": "[concat('https://', variables('portalSiteName'), '.azurewebsites.net/')]"
         },
-        "IoT Hub Name": {
+        "_IoT_Hub_Name": {
             "type": "String",
             "value": "[variables('iotHubName')]"
         },
-        "Function App Name": {
+        "_Function_App_Name": {
             "type": "String",
             "value": "[variables('functionAppName')]"
         },
-        "Storage Account Name": {
+        "_Storage_Account_Name": {
             "type": "String",
             "value": "[variables('storageAccountName')]"
         },
-        "SignalR Name": {
+        "_SignalR_Name": {
             "type": "String",
             "value": "[variables('signalrName')]"
         }
