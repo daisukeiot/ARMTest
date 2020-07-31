@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ResourceGroupName": {
+        "rgName": {
             "type": "string"
         },
-        "Region": {
+        "rgLocation": {
             "type": "string"
         }
     },
@@ -14,8 +14,8 @@
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "location": "[parameters('Region')]",
-            "name": "[parameters('ResourceGroupName')]",
+            "location": "[parameters('rgLocation')]",
+            "name": "[parameters('rgName')]",
             "properties": {}
         }
     ],
