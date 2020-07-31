@@ -228,7 +228,8 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', parameters('IotHubName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
             ],
             "properties": {
                 "name": "[variables('functionAppName')]",
@@ -256,6 +257,10 @@
                         {
                             "name": "EVENTHUB_CS",
                             "value": "[concat('Endpoint=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.endpoint, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey, ';EntityPath=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.path)]"
+                        },
+                        {
+                            "name": "AzureSignalRConnectionString",
+                            "value": "[concat('Endpoint=https://', variables('signalrName'), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
                         }
                     ]
                 }
@@ -275,6 +280,59 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.SignalRService/SignalR",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('signalrName')]",
+            "tags": {
+                "ENV": "P15"
+            },
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_S1",
+                "tier": "Standard",
+                "size": "S1",
+                "capacity": 1
+            },
+            "kind": "SignalR",
+            "properties": {
+                "hostNamePrefix": "[toLower(variables('signalrName')]",
+                "features": [
+                    {
+                        "flag": "ServiceMode",
+                        "value": "Classic",
+                        "properties": {}
+                    }
+                ],
+                "cors": {
+                    "allowedOrigins": [
+                        "*"
+                    ]
+                },
+                "upstream": {},
+                "networkACLs": {
+                    "defaultAction": "Deny",
+                    "publicNetwork": {
+                        "allow": [
+                            "ServerConnection",
+                            "ClientConnection",
+                            "RESTAPI"
+                        ]
+                    },
+                    "privateEndpoints": []
+                }
+            }
         }
-    ]
+    ],
+    "outputs": {
+        "function": {
+            "type": "string",
+            "value": "[variables('function_name')]"
+        },
+        "web": {
+            "type": "string",
+            "value": "[variables('website_name')]"
+        }
+    }
 }
