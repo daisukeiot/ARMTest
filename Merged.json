@@ -218,6 +218,7 @@
             },
             "location": "[resourceGroup().location]",
             "dependsOn": [
+                "[resourceId('Microsoft.Devices/IotHubs', parameters('IotHubName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
