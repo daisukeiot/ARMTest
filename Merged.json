@@ -424,7 +424,7 @@
                     "eventTimeToLiveInMinutes": 1440
                 }
             }
-        },
+        }
     ],
     "outputs": {
         "iothub": {
