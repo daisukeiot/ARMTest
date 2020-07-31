@@ -60,7 +60,7 @@
             "metadata": {
                 "description": "The name of SignalR.  Must be globally unique."
             },
-            "defaultValue": "[toLower(concat(resourceGroup().name, '-SignalR-', uniqueString(resourceGroup().id)))]"
+            "defaultValue": "[concat(resourceGroup().name, '-SignalR-', uniqueString(resourceGroup().id))]"
         }
     },
     "variables": {
