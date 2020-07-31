@@ -373,7 +373,13 @@
             "properties": {
                 "serverFarmId": "[parameters('hostingPlanName')]",
                 "siteConfig": {
-                    "webSocketsEnabled": true
+                    "webSocketsEnabled": true,
+                    "appSettings": [
+                        {
+                            "name": "Azure__SignalR__ConnectionString",
+                            "value": "[concat('Endpoint=https://', toLower(variables('signalrName')), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
+                        }
+                    ]
                 }
             },
             "resources": [
