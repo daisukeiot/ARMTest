@@ -313,13 +313,21 @@
         }
     ],
     "outputs": {
-        "function": {
+        "iothub": {
             "type": "string",
-            "value": "[variables('function_name')]"
+            "value": "[variables('iotHubName')]"
         },
-        "web": {
+        "functionAppName": {
             "type": "string",
-            "value": "[variables('website_name')]"
+            "value": "[variables('functionAppName')]"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "value": "[variables('storageAccountName')]"
+        },
+        "signalrName": {
+            "type": "string",
+            "value": "[variables('signalrName')]"
         }
     }
 }
