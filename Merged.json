@@ -3,97 +3,97 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "IotHubName": {
-            "type": "string",
+            "defaultValue": "[concat('Hub-', uniqueString(resourceGroup().id))]",
+            "type": "String",
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
-            },
-            "defaultValue": "[concat('Hub-', uniqueString(resourceGroup().id))]"
+            }
         },
         "IotHubSKU": {
-            "type": "string",
             "defaultValue": "S1",
             "allowedValues": [
                 "F1",
                 "S1"
             ],
+            "type": "String",
             "metadata": {
                 "description": "IoT Hub SKU."
             }
         },
         "IotHubLocation": {
-            "type": "string",
             "defaultValue": "Central US",
             "allowedValues": [
                 "Central US",
                 "Japan East",
                 "North Europe"
             ],
+            "type": "String",
             "metadata": {
                 "description": "Region"
             }
         },
         "PortalSiteName": {
-            "type": "string",
+            "defaultValue": "[concat('Portal-', uniqueString(resourceGroup().id))]",
+            "type": "String",
             "metadata": {
                 "description": "The name of Portal.  Must be globally unique."
-            },
-            "defaultValue": "[concat('Portal-', uniqueString(resourceGroup().id))]"
+            }
         },
         "PortalRepoURL": {
-            "type": "string",
             "defaultValue": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
+            "type": "String",
             "metadata": {
                 "description": "The URL for the GitHub repository that contains the project to deploy."
             }
         },
         "PortalRepoBranch": {
-            "type": "string",
             "defaultValue": "master",
+            "type": "String",
             "metadata": {
                 "description": "The branch of the GitHub repository to use."
             }
         },
         "FunctionsName": {
-            "type": "string",
+            "defaultValue": "[concat('Functions-', uniqueString(resourceGroup().id))]",
+            "type": "String",
             "metadata": {
                 "description": "The name of Azure Functions.  Must be globally unique."
-            },
-            "defaultValue": "[concat('Functions-', uniqueString(resourceGroup().id))]"
+            }
         },
         "HostingPlanName": {
-            "type": "string",
+            "defaultValue": "[concat('HostingPlan-', uniqueString(resourceGroup().id))]",
+            "type": "String",
             "metadata": {
                 "description": "The name of Hosting Plan.  Must be globally unique."
-            },
-            "defaultValue": "[concat('HostingPlan-', uniqueString(resourceGroup().id))]"
+            }
         },
         "StorageAccountName": {
-            "type": "string",
+            "defaultValue": "[toLower(concat('stor', uniqueString(resourceGroup().id)))]",
+            "type": "String",
             "metadata": {
                 "description": "The name of Storage Account.  Must be globally unique."
-            },
-            "defaultValue": "[toLower(concat('stor', uniqueString(resourceGroup().id)))]"
+            }
         },
         "FunctionRepoURL": {
-            "type": "string",
             "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
+            "type": "String",
             "metadata": {
                 "description": "The URL for the GitHub repository that contains the project to deploy."
             }
         },
         "FunctionRepoBranch": {
-            "type": "string",
             "defaultValue": "master",
+            "type": "String",
             "metadata": {
                 "description": "The branch of the GitHub repository to use."
             }
         },
         "SignalrName": {
-            "type": "string",
+            "defaultValue": "[concat('SignalR-', uniqueString(resourceGroup().id))]",
+            "type": "String",
             "metadata": {
                 "description": "The name of SignalR.  Must be globally unique."
-            },
-            "defaultValue": "[concat('SignalR-', uniqueString(resourceGroup().id))]"
+            }
         }
     },
     "variables": {
@@ -222,12 +222,12 @@
             "apiVersion": "2020-04-01-preview",
             "name": "[variables('iotHubEventGridTopic')]",
             "location": "[variables('IotHubLocation')]",
-            "tags": {
-                "ENV": "P15"
-            },
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
+            "tags": {
+                "ENV": "P15"
+            },
             "properties": {
                 "source": "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
                 "topicType": "Microsoft.Devices.IoTHubs"
@@ -237,29 +237,29 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "name": "[variables('storageAccountName')]",
-            "kind": "Storage",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "ENV": "P15"
             },
-            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
-            }
+            },
+            "kind": "Storage"
         },
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2019-08-01",
             "name": "[variables('hostingPlanName')]",
-            "kind": "app",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "ENV": "P15"
             },
-            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "S1",
                 "capacity": 0
             },
+            "kind": "app",
             "properties": {
                 "name": "[variables('hostingPlanName')]"
             }
@@ -268,10 +268,6 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
             "name": "[variables('functionAppName')]",
-            "kind": "functionapp",
-            "tags": {
-                "ENV": "P15"
-            },
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
@@ -279,6 +275,10 @@
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
             ],
+            "tags": {
+                "ENV": "P15"
+            },
+            "kind": "functionapp",
             "properties": {
                 "name": "[variables('functionAppName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
@@ -315,9 +315,9 @@
             },
             "resources": [
                 {
+                    "type": "sourcecontrols",
                     "apiVersion": "2018-11-01",
                     "name": "web",
-                    "type": "sourcecontrols",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
@@ -333,10 +333,10 @@
             "type": "Microsoft.SignalRService/SignalR",
             "apiVersion": "2020-05-01",
             "name": "[variables('signalrName')]",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "ENV": "P15"
             },
-            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard_S1",
                 "tier": "Standard",
@@ -360,16 +360,16 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites",
             "apiVersion": "2015-08-01",
             "name": "[variables('portalSiteName')]",
-            "type": "Microsoft.Web/sites",
-            "tags": {
-                "ENV": "P15"
-            },
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
+            "tags": {
+                "ENV": "P15"
+            },
             "properties": {
                 "serverFarmId": "[parameters('hostingPlanName')]",
                 "siteConfig": {
@@ -384,9 +384,9 @@
             },
             "resources": [
                 {
+                    "type": "sourcecontrols",
                     "apiVersion": "2015-08-01",
                     "name": "web",
-                    "type": "sourcecontrols",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
@@ -405,8 +405,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
                 "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]",
-                "[resourceId('Microsoft.Web/Sites/', variables('portalSiteName'), '/sourcecontrols/web')]"
-
+                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'web')]"
             ],
             "properties": {
                 "destination": {
@@ -436,19 +435,19 @@
     ],
     "outputs": {
         "iothub": {
-            "type": "string",
+            "type": "String",
             "value": "[variables('iotHubName')]"
         },
         "functionAppName": {
-            "type": "string",
+            "type": "String",
             "value": "[variables('functionAppName')]"
         },
         "storageAccountName": {
-            "type": "string",
+            "type": "String",
             "value": "[variables('storageAccountName')]"
         },
         "signalrName": {
-            "type": "string",
+            "type": "String",
             "value": "[variables('signalrName')]"
         }
     }
