@@ -297,7 +297,6 @@
             },
             "kind": "SignalR",
             "properties": {
-                "hostNamePrefix": "[toLower(variables('signalrName'))]",
                 "features": [
                     {
                         "flag": "ServiceMode",
@@ -309,18 +308,6 @@
                     "allowedOrigins": [
                         "*"
                     ]
-                },
-                "upstream": {},
-                "networkACLs": {
-                    "defaultAction": "Deny",
-                    "publicNetwork": {
-                        "allow": [
-                            "ServerConnection",
-                            "ClientConnection",
-                            "RESTAPI"
-                        ]
-                    },
-                    "privateEndpoints": []
                 }
             }
         }
