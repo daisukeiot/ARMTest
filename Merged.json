@@ -434,19 +434,23 @@
         }
     ],
     "outputs": {
-        "iothub": {
+        "Web Site Address": {
+            "type": "String",
+            "value": "[concat('https://',  variables('portalSiteName'),'.azurewebsites.net/')]"
+        },
+        "IoT Hub Name": {
             "type": "String",
             "value": "[variables('iotHubName')]"
         },
-        "functionAppName": {
+        "Function App Name": {
             "type": "String",
             "value": "[variables('functionAppName')]"
         },
-        "storageAccountName": {
+        "Storage Account Name": {
             "type": "String",
             "value": "[variables('storageAccountName')]"
         },
-        "signalrName": {
+        "SignalR Name": {
             "type": "String",
             "value": "[variables('signalrName')]"
         }
