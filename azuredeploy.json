@@ -38,7 +38,7 @@
             "name": "[variables('iotHubName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "sku": {
                 "name": "S1",
@@ -139,7 +139,7 @@
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "properties": {
                 "source": "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
@@ -152,7 +152,7 @@
             "name": "[variables('storageAccountName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "sku": {
                 "name": "Standard_LRS",
@@ -166,7 +166,7 @@
             "name": "[variables('hostingPlanName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "sku": {
                 "name": "S1",
@@ -189,7 +189,7 @@
                 "[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
             ],
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "kind": "functionapp",
             "properties": {
@@ -248,7 +248,7 @@
             "name": "[variables('signalrName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "sku": {
                 "name": "Standard_S1",
@@ -281,7 +281,7 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.2"
             },
             "properties": {
                 "serverFarmId": "[variables('hostingPlanName')]",
@@ -291,6 +291,10 @@
                         {
                             "name": "Azure__SignalR__ConnectionString",
                             "value": "[concat('Endpoint=https://', toLower(variables('signalrName')), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
+                        },
+                        {
+                            "name": "Azure__IoTHub__ConnectionString",
+                            "value": "[concat('HostName=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).hostName, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey)]"
                         }
                     ]
                 }
