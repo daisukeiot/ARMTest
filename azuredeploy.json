@@ -27,7 +27,7 @@
         "signalrName": "[concat('SignalR-', take(uniqueString(resourceGroup().id),5))]",
         "portalSiteName": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
         "PortalRepoURL": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
-        "PortalRepoBranch": "v0.2",
+        "PortalRepoBranch": "master",
         "FunctionRepoURL": "https://github.com/daisukeiot/Solution-Template-Functions.git",
         "FunctionRepoBranch": "master"
     },
