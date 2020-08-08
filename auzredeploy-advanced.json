@@ -125,10 +125,10 @@
             "name": "[variables('iotHubName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "sku": {
-                "name": "[variables('IotHubSKU')[parameters('IotHubSKU')].SkuName]",
+                "name": "S1",
                 "tier": "Standard",
                 "capacity": 1
             },
@@ -140,7 +140,7 @@
                 "eventHubEndpoints": {
                     "events": {
                         "retentionTimeInDays": 1,
-                        "partitionCount": "[variables('IotHubSKU')[parameters('IotHubSKU')].partitionCount]"
+                        "partitionCount": 4
                     }
                 },
                 "routing": {
@@ -226,7 +226,7 @@
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "properties": {
                 "source": "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
@@ -235,33 +235,32 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2018-11-01",
             "name": "[variables('storageAccountName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
+                "name": "Standard_LRS"
             },
             "kind": "Storage"
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2019-08-01",
+            "apiVersion": "2018-11-01",
             "name": "[variables('hostingPlanName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "sku": {
-                "name": "S1",
-                "capacity": 0
+                "name": "S1"
             },
             "kind": "app",
             "properties": {
-                "name": "[variables('hostingPlanName')]"
+                "workerSize": 0,
+                "numberOfWorkers": 1
             }
         },
         {
@@ -276,14 +275,16 @@
                 "[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
             ],
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "kind": "functionapp",
             "properties": {
                 "name": "[variables('functionAppName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "clientAffinityEnabled": false,
+                "enabled" : true,
                 "siteConfig": {
+                    "alwaysOn": true,
                     "cors": {
                         "allowedOrigins": [
                             "*"
@@ -322,8 +323,8 @@
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('FunctionRepoURL')]",
-                        "branch": "[parameters('FunctionRepoBranch')]",
+                        "RepoUrl": "[variables('FunctionRepoURL')]",
+                        "branch": "[variables('FunctionRepoBranch')]",
                         "IsManualIntegration": true
                     }
                 }
@@ -335,7 +336,7 @@
             "name": "[variables('signalrName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "sku": {
                 "name": "Standard_S1",
@@ -354,7 +355,7 @@
                 ],
                 "cors": {
                     "allowedOrigins": [
-                        "*"
+                        "[concat('https://', toLower(variables('portalSiteName')), '.azurewebsites.net')]"
                     ]
                 }
             }
@@ -368,16 +369,20 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
             "tags": {
-                "ENV": "P15"
+                "ENV": "v0.3"
             },
             "properties": {
-                "serverFarmId": "[parameters('hostingPlanName')]",
+                "serverFarmId": "[variables('hostingPlanName')]",
                 "siteConfig": {
                     "webSocketsEnabled": true,
                     "appSettings": [
                         {
                             "name": "Azure__SignalR__ConnectionString",
                             "value": "[concat('Endpoint=https://', toLower(variables('signalrName')), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
+                        },
+                        {
+                            "name": "Azure__IoTHub__ConnectionString",
+                            "value": "[concat('HostName=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).hostName, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey)]"
                         }
                     ]
                 }
@@ -391,8 +396,8 @@
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('PortalRepoURL')]",
-                        "branch": "[parameters('PortalRepoBranch')]",
+                        "repoUrl": "[variables('PortalRepoURL')]",
+                        "branch": "[variables('PortalRepoBranch')]",
                         "IsManualIntegration": true
                     }
                 }

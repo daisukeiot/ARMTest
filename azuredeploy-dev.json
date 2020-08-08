@@ -13,35 +13,35 @@
             "metadata": {
                 "description": "Region"
             }
+        },
+        "PortalRepoURL": {
+            "defaultValue": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
+            "type": "String",
+            "metadata": {
+                "description": "The URL for the GitHub repository that contains the project to deploy."
+            }
+        },
+        "PortalRepoBranch": {
+            "defaultValue": "master",
+            "type": "String",
+            "metadata": {
+                "description": "The branch of the GitHub repository to use."
+            }
+        },
+        "FunctionRepoURL": {
+            "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
+            "type": "String",
+            "metadata": {
+                "description": "The URL for the GitHub repository that contains the project to deploy."
+            }
+        },
+        "FunctionRepoBranch": {
+            "defaultValue": "master",
+            "type": "String",
+            "metadata": {
+                "description": "The branch of the GitHub repository to use."
+            }
         }
-        // "PortalRepoURL": {
-        //     "defaultValue": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
-        //     "type": "String",
-        //     "metadata": {
-        //         "description": "The URL for the GitHub repository that contains the project to deploy."
-        //     }
-        // },
-        // "PortalRepoBranch": {
-        //     "defaultValue": "master",
-        //     "type": "String",
-        //     "metadata": {
-        //         "description": "The branch of the GitHub repository to use."
-        //     }
-        // },
-        // "FunctionRepoURL": {
-        //     "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
-        //     "type": "String",
-        //     "metadata": {
-        //         "description": "The URL for the GitHub repository that contains the project to deploy."
-        //     }
-        // },
-        // "FunctionRepoBranch": {
-        //     "defaultValue": "master",
-        //     "type": "String",
-        //     "metadata": {
-        //         "description": "The branch of the GitHub repository to use."
-        //     }
-        // }
     },
     "variables": {
         "iotHubLocation": "[parameters('IotHubLocation')]",
@@ -54,14 +54,14 @@
         "storageAccountName": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5)))]",
         "signalrName": "[concat('SignalR-', take(uniqueString(resourceGroup().id),5))]",
         "portalSiteName": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
-        "PortalRepoURL": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
-        "PortalRepoBranch": "master",
-        "FunctionRepoURL": "https://github.com/daisukeiot/Solution-Template-Functions.git",
-        "FunctionRepoBranch": "master"
-        // "PortalRepoURL": "[parameters('PortalRepoURL')]",
-        // "PortalRepoBranch": "[parameters('PortalRepoBranch')]",
-        // "FunctionRepoURL": "[parameters('FunctionRepoURL')]",
-        // "FunctionRepoBranch": "[parameters('FunctionRepoBranch')]"
+        // "PortalRepoURL": "https://github.com/daisukeiot/Solution-Template-WebApp.git",
+        // "PortalRepoBranch": "master",
+        // "FunctionRepoURL": "https://github.com/daisukeiot/Solution-Template-Functions.git",
+        // "FunctionRepoBranch": "master"
+        "PortalRepoURL": "[parameters('PortalRepoURL')]",
+        "PortalRepoBranch": "[parameters('PortalRepoBranch')]",
+        "FunctionRepoURL": "[parameters('FunctionRepoURL')]",
+        "FunctionRepoBranch": "[parameters('FunctionRepoBranch')]"
     },
     "resources": [
         {
@@ -70,7 +70,7 @@
             "name": "[variables('iotHubName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "sku": {
                 "name": "S1",
@@ -171,7 +171,7 @@
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "properties": {
                 "source": "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
@@ -184,7 +184,7 @@
             "name": "[variables('storageAccountName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -197,7 +197,7 @@
             "name": "[variables('hostingPlanName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "sku": {
                 "name": "S1"
@@ -220,7 +220,7 @@
                 "[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
             ],
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "kind": "functionapp",
             "properties": {
@@ -281,7 +281,7 @@
             "name": "[variables('signalrName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "sku": {
                 "name": "Standard_S1",
@@ -314,7 +314,7 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
             "tags": {
-                "ENV": "v0.2"
+                "ENV": "v0.3"
             },
             "properties": {
                 "serverFarmId": "[variables('hostingPlanName')]",
