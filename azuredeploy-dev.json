@@ -209,7 +209,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-08-01",
             "name": "[variables('functionAppName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -261,7 +261,7 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2020-06-01",
+                    "apiVersion": "2020-08-01",
                     "name": "functiongit",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
@@ -306,7 +306,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2020-06-01",
+            "apiVersion": "2020-08-01",
             "name": "[variables('portalSiteName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -334,7 +334,7 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2020-06-01",
+                    "apiVersion": "2020-08-01",
                     "name": "portalgit",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
