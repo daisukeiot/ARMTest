@@ -224,6 +224,7 @@
                 "name": "[variables('functionAppName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "clientAffinityEnabled": false,
+                "enabled" : true,
                 "siteConfig": {
                     "cors": {
                         "allowedOrigins": [
