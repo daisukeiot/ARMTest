@@ -226,6 +226,7 @@
                 "clientAffinityEnabled": false,
                 "enabled" : true,
                 "siteConfig": {
+                    "alwaysOn": true,
                     "cors": {
                         "allowedOrigins": [
                             "*"
