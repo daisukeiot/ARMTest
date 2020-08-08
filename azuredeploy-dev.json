@@ -176,33 +176,32 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2018-11-01",
             "name": "[variables('storageAccountName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "v0.2"
             },
             "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
+                "name": "Standard_LRS"
             },
             "kind": "Storage"
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2019-08-01",
+            "apiVersion": "2018-11-01",
             "name": "[variables('hostingPlanName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "v0.2"
             },
             "sku": {
-                "name": "S1",
-                "capacity": 0
+                "name": "S1"
             },
             "kind": "app",
             "properties": {
-                "name": "[variables('hostingPlanName')]"
+                "workerSize": 0,
+                "numberOfWorkers": 1
             }
         },
         {
