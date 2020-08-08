@@ -234,7 +234,7 @@
                 {
                     "type": "sourcecontrols",
                     "apiVersion": "2019-08-01",
-                    "name": "functiongit",
+                    "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
@@ -307,7 +307,7 @@
                 {
                     "type": "sourcecontrols",
                     "apiVersion": "2019-08-01",
-                    "name": "portalgit",
+                    "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
@@ -325,7 +325,7 @@
             "name": "[concat(variables('iotHubEventGridTopic'), '/PortalIoTHubEventSubscription')]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
-                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'portalgit')]"
+                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'web')]"
             ],
             "properties": {
                 "destination": {
