@@ -203,6 +203,9 @@
                 "name": "S1"
             },
             "kind": "app",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+            ],
             "properties": {
                 "workerSize": 0,
                 "numberOfWorkers": 1
@@ -210,7 +213,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('functionAppName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -262,8 +265,8 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2018-11-01",
-                    "name": "web",
+                    "apiVersion": "2020-06-01",
+                    "name": "functiongit",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
@@ -307,7 +310,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2015-08-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('portalSiteName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -335,8 +338,8 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2015-08-01",
-                    "name": "web",
+                    "apiVersion": "2020-06-01",
+                    "name": "portalgit",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
@@ -354,8 +357,7 @@
             "name": "[concat(variables('iotHubEventGridTopic'), '/PortalIoTHubEventSubscription')]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
-                "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]",
-                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'web')]"
+                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'portalgit')]"
             ],
             "properties": {
                 "destination": {
