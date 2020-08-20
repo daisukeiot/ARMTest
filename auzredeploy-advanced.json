@@ -97,26 +97,20 @@
         }
     },
     "variables": {
-        "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
-        "IotHubSKU": {
-            "F1": {
-                "SkuName": "F1",
-                "partitionCount": 2
-            },
-            "S1": {
-                "SkuName": "S1",
-                "partitionCount": 4
-            }
-        },
         "iotHubLocation": "[parameters('IotHubLocation')]",
         "iotHubName": "[parameters('IotHubName')]",
+        "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
         "iotHubEventGridTopic": "EventGridIoTHubTopic",
         "functionAppName": "[parameters('FunctionsName')]",
         "hostingPlanName": "[parameters('HostingPlanName')]",
         "storageAccountName": "[parameters('StorageAccountName')]",
         "signalrName": "[parameters('SignalrName')]",
-        "portalSiteName": "[parameters('PortalSiteName')]"
+        "portalSiteName": "[parameters('PortalSiteName')]",
+        "PortalRepoURL": "[parameters('PortalRepoURL')]",
+        "PortalRepoBranch": "[parameters('PortalRepoBranch')]",
+        "FunctionRepoURL": "[parameters('FunctionRepoURL')]",
+        "FunctionRepoBranch": "[parameters('FunctionRepoBranch')]"
     },
     "resources": [
         {
@@ -258,6 +252,9 @@
                 "name": "S1"
             },
             "kind": "app",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            ],
             "properties": {
                 "workerSize": 0,
                 "numberOfWorkers": 1
@@ -265,7 +262,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2019-08-01",
             "name": "[variables('functionAppName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -317,7 +314,7 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2018-11-01",
+                    "apiVersion": "2019-08-01",
                     "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
@@ -362,7 +359,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2015-08-01",
+            "apiVersion": "2019-08-01",
             "name": "[variables('portalSiteName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -390,7 +387,7 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2015-08-01",
+                    "apiVersion": "2019-08-01",
                     "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
@@ -409,7 +406,6 @@
             "name": "[concat(variables('iotHubEventGridTopic'), '/PortalIoTHubEventSubscription')]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
-                "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]",
                 "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'web')]"
             ],
             "properties": {
