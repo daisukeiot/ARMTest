@@ -32,6 +32,13 @@
                 "description": "Region"
             }
         },
+        "DpsName": {
+            "defaultValue": "[concat('Dps-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of DPS.  Must be globally unique."
+            }
+        },
         "EventHubsName": {
             "defaultValue": "[concat('EventHubs-', take(uniqueString(resourceGroup().id),5))]",
             "type": "String",
@@ -116,6 +123,7 @@
         "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
         "iotHubEventGridTopic": "EventGridIoTHubTopic",
+        "dpsName" : "[parameters('DpsName')]",
         "eventHubsName" : "[parameters('EventHubsName')]",
         "tsiName" : "[parameters('TsiName')]",
         "functionAppName": "[parameters('FunctionsName')]",
