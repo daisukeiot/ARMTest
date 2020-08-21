@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "IotHubName": {
-            "defaultValue": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
+            "defaultValue": "IoTPnPADT-Demo-Hub",
             "type": "String",
             "metadata": {
                 "description": "The name of IoT Hub.  Must be globally unique."
@@ -33,7 +33,7 @@
             }
         },
         "PortalSiteName": {
-            "defaultValue": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
+            "defaultValue": "IoTPnPADT-Demo",
             "type": "String",
             "metadata": {
                 "description": "The name of Portal.  Must be globally unique."
