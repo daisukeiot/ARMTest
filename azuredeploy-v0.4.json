@@ -248,7 +248,7 @@
         {
             "type": "Microsoft.Devices/provisioningServices",
             "apiVersion": "2020-01-01",
-            "name": "[parameters('provisioningServices_CUTC_Dps_name')]",
+            "name": "[parameters('dpsName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
                 "ENV": "[variables('Tag')]"
