@@ -82,7 +82,7 @@
             }
         },
         "FunctionRepoBranch": {
-            "defaultValue": "master",
+            "defaultValue": "ADT-Demo",
             "type": "String",
             "metadata": {
                 "description": "The branch of the GitHub repository to use."
@@ -423,29 +423,6 @@
                         "Microsoft.Devices.DeviceDeleted",
                         "Microsoft.Devices.DeviceConnected",
                         "Microsoft.Devices.DeviceDisconnected"
-                    ]
-                },
-                "labels": [],
-                "eventDeliverySchema": "EventGridSchema",
-                "retryPolicy": {
-                    "maxDeliveryAttempts": 30,
-                    "eventTimeToLiveInMinutes": 1440
-                }
-            }
-        },
-        {
-            "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
-            "apiVersion": "2020-04-01-preview",
-            "name": "[concat(variables('iotHubEventGridTopic'), '/IoTHubTelemetryEventSubscription')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]"
-            ],
-            "properties": {
-                "destination": {
-                },
-                "filter": {
-                    "includedEventTypes": [
-                        "Microsoft.Devices.Telemetry"
                     ]
                 },
                 "labels": [],
