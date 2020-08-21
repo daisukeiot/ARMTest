@@ -47,7 +47,7 @@
             }
         },
         "PortalSiteName": {
-            "defaultValue": "IoTPnPADT-Demo",
+            "defaultValue": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
             "type": "String",
             "metadata": {
                 "description": "The name of Portal.  Must be globally unique."
