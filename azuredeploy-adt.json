@@ -2,6 +2,24 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "IotHubName": {
+            "defaultValue": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of IoT Hub.  Must be globally unique."
+            }
+        },
+        "IotHubSKU": {
+            "defaultValue": "S1",
+            "allowedValues": [
+                "F1",
+                "S1"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "IoT Hub SKU."
+            }
+        },
         "IotHubLocation": {
             "defaultValue": "Central US",
             "allowedValues": [
@@ -12,6 +30,13 @@
             "type": "String",
             "metadata": {
                 "description": "Region"
+            }
+        },
+        "PortalSiteName": {
+            "defaultValue": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of Portal.  Must be globally unique."
             }
         },
         "PortalRepoURL": {
@@ -28,6 +53,27 @@
                 "description": "The branch of the GitHub repository to use."
             }
         },
+        "FunctionsName": {
+            "defaultValue": "[concat('Functions-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of Azure Functions.  Must be globally unique."
+            }
+        },
+        "HostingPlanName": {
+            "defaultValue": "[concat('HostingPlan-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of Hosting Plan.  Must be globally unique."
+            }
+        },
+        "StorageAccountName": {
+            "defaultValue": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5)))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of Storage Account.  Must be globally unique."
+            }
+        },
         "FunctionRepoURL": {
             "defaultValue": "https://github.com/daisukeiot/Solution-Template-Functions.git",
             "type": "String",
@@ -41,20 +87,26 @@
             "metadata": {
                 "description": "The branch of the GitHub repository to use."
             }
+        },
+        "SignalrName": {
+            "defaultValue": "[concat('SignalR-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of SignalR.  Must be globally unique."
+            }
         }
     },
     "variables": {
         "iotHubLocation": "[parameters('IotHubLocation')]",
-        "iotHubName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
-        "consumerGroupName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5), '/events/telemetry-cg')]",
+        "iotHubName": "[parameters('IotHubName')]",
+        "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
-        "iotHubEventGridTopic": "[concat('EventGridIoTHubTopic-', take(uniqueString(resourceGroup().id),5))]",
-        "iotHubEventGridTelemetryTopic": "EventGridIoTHubTelemetryTopic",
-        "functionAppName": "[concat('Functions-', take(uniqueString(resourceGroup().id),5))]",
-        "hostingPlanName": "[concat('HostingPlan-', take(uniqueString(resourceGroup().id),5))]",
-        "storageAccountName": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5)))]",
-        "signalrName": "[concat('SignalR-', take(uniqueString(resourceGroup().id),5))]",
-        "portalSiteName": "[concat('Portal-', take(uniqueString(resourceGroup().id),5))]",
+        "iotHubEventGridTopic": "EventGridIoTHubTopic",
+        "functionAppName": "[parameters('FunctionsName')]",
+        "hostingPlanName": "[parameters('HostingPlanName')]",
+        "storageAccountName": "[parameters('StorageAccountName')]",
+        "signalrName": "[parameters('SignalrName')]",
+        "portalSiteName": "[parameters('PortalSiteName')]",
         "PortalRepoURL": "[parameters('PortalRepoURL')]",
         "PortalRepoBranch": "[parameters('PortalRepoBranch')]",
         "FunctionRepoURL": "[parameters('FunctionRepoURL')]",
@@ -210,7 +262,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2020-08-01",
+            "apiVersion": "2019-08-01",
             "name": "[variables('functionAppName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -262,8 +314,8 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2020-08-01",
-                    "name": "functiongit",
+                    "apiVersion": "2019-08-01",
+                    "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
@@ -307,7 +359,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2020-08-01",
+            "apiVersion": "2019-08-01",
             "name": "[variables('portalSiteName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -335,8 +387,8 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2020-08-01",
-                    "name": "portalgit",
+                    "apiVersion": "2019-08-01",
+                    "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
@@ -354,7 +406,7 @@
             "name": "[concat(variables('iotHubEventGridTopic'), '/IoTHubDeviceEventSubscription')]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
-                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'portalgit')]"
+                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'web')]"
             ],
             "properties": {
                 "destination": {
