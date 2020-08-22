@@ -2,14 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "IotHubName": {
-            "defaultValue": "IoTPnPADT-Demo-Hub",
-            "type": "String",
-            "metadata": {
-                "description": "The name of IoT Hub.  Must be globally unique."
-            }
-        },
-
+      "IotHubName": {
+        "defaultValue": "IoTPnPADT-Demo-Hub",
+        "type": "String",
+        "metadata": {
+          "description": "The name of IoT Hub.  Must be globally unique."
+        }
+      }
     },
     "variables": {},
     "resources": [
@@ -20,12 +19,16 @@
         "properties": {
           "mode": "Incremental",
           "templateLink": {
-            "uri": "[uri(deployment().properties.templateLink.uri, 'helloworld.json')]",
+            "uri": "[uri(deployment().properties.templateLink.uri, 'iothub.json')]",
             "contentVersion": "1.0.0.0"
           },
           "parameters": {
-            "iotHubLocation":{"value": "[resourceGroup().location]"},
-            "iotHubName":{"value": "[parameters('IotHubName')]"}
+            "iotHubLocation": {
+              "value": "[resourceGroup().location]"
+            },
+            "iotHubName": {
+              "value": "[parameters('IotHubName')]"
+            }
           }
         }
       }
