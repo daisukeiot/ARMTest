@@ -4,18 +4,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "iotHubName": {
-            "type": "string",
-             "defaultValue": "[resourceGroup().location]"
+            "type": "string"
         },
         "iotHubLocation": {
-            "type": "string",
-             "defaultValue": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]"
-        }        
+            "type": "string"
+        }
     },
     "functions": [],
     "variables": {
         "iotHubName": "[parameters('iotHubName')]",
-        "iotHubLocation": "[parameters('IotHubLocation')]",
+        "iotHubLocation": "[parameters('iotHubLocation')]",
     },
     "resources": [
         {

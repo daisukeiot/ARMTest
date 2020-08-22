@@ -48,6 +48,10 @@
                 "templateLink": {
                     "uri": "[uri(deployment().properties.templateLink.uri, 'iothub.json')]",
                     "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "iotHubName" :  {"value" : "[variables('iotHubName')]"},
+                    "iotHubLocation" :  {"value" : "[variables('rgLocation')]"}
                 }
             }
         }
