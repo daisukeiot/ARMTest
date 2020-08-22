@@ -46,7 +46,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(deployment().properties.templateLink.uri, 'templates/iothub.json')]",
+                    "uri": "[uri(deployment().properties.templateLink.uri, 'iothub.json')]",
                     "contentVersion": "1.0.0.0"
                 }
             }
@@ -55,7 +55,7 @@
     "outputs" : {
         "_Web_Site_Address": {
             "type": "String",
-            "value": "[uri(deployment().properties.templateLink.uri, 'templates/iothub.json')]"
+            "value": "[uri(deployment().properties.templateLink.uri, 'iothub.json')]"
         }
     }
 }
