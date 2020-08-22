@@ -13,7 +13,7 @@
     "functions": [],
     "variables": {
         "iotHubName": "[parameters('iotHubName')]",
-        "iotHubLocation": "[parameters('iotHubLocation')]",
+        "iotHubLocation": "[parameters('iotHubLocation')]"
     },
     "resources": [
         {
