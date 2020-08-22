@@ -3,6 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "rgName": {
+            "defaultValue": "Solution Accelerator",
             "type": "string",
             "metadata": {
               "description": "Name of the resourceGroup to create"
