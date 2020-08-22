@@ -2,14 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ResouceGroupName" : {
-            "defaultValue": "Solution Accelerator Resource",
-            "type": "String",
+        "rgName": {
+            "type": "string",
             "metadata": {
-                "description": "Resource Group Name"
-            }            
+              "description": "Name of the resourceGroup to create"
+            }
         },
-        "ResourceGrouplocation": {
+        "rgLocation": {
             "defaultValue": "Central US",
             "allowedValues": [
                 "Central US",
@@ -79,6 +78,16 @@
         "FunctionRepoBranch": "[parameters('FunctionRepoBranch')]"
     },
     "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2019-10-01",
+            "name": "[parameters('rgName')]",
+            "location": "[parameters('rgLocation')]",
+            "tags": {
+                "ENV": "v0.3"
+            },
+            "properties": {}
+        },
         {
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
