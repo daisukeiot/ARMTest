@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "rgName": {
@@ -10,18 +10,6 @@
             }
         },
         "rgLocation": {
-            "defaultValue": "Central US",
-            "allowedValues": [
-                "Central US",
-                "Japan East",
-                "North Europe"
-            ],
-            "type": "String",
-            "metadata": {
-                "description": "Region"
-            }
-        },
-        "IotHubLocation": {
             "defaultValue": "Central US",
             "allowedValues": [
                 "Central US",
@@ -63,7 +51,6 @@
         }
     },
     "variables": {
-        "iotHubLocation": "[parameters('IotHubLocation')]",
         "iotHubName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5))]",
         "consumerGroupName": "[concat('Hub-', take(uniqueString(resourceGroup().id),5), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
@@ -81,7 +68,7 @@
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2019-10-01",
+            "apiVersion": "2020-06-01",
             "name": "[parameters('rgName')]",
             "location": "[parameters('rgLocation')]",
             "tags": {
@@ -93,7 +80,7 @@
             "type": "Microsoft.Devices/IotHubs",
             "apiVersion": "2020-03-01",
             "name": "[variables('iotHubName')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "tags": {
                 "ENV": "v0.3"
             },
@@ -102,11 +89,10 @@
                 "tier": "Standard",
                 "capacity": 1
             },
-            "identity": {
-                "type": "None"
-            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
+            ],
             "properties": {
-                "ipFilterRules": [],
                 "eventHubEndpoints": {
                     "events": {
                         "retentionTimeInDays": 1,
@@ -191,7 +177,7 @@
             "type": "Microsoft.EventGrid/systemTopics",
             "apiVersion": "2020-04-01-preview",
             "name": "[variables('iotHubEventGridTopic')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
@@ -207,7 +193,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2018-11-01",
             "name": "[variables('storageAccountName')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "tags": {
                 "ENV": "v0.3"
             },
@@ -220,7 +206,7 @@
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-11-01",
             "name": "[variables('hostingPlanName')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "tags": {
                 "ENV": "v0.3"
             },
@@ -240,7 +226,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2020-08-01",
             "name": "[variables('functionAppName')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
@@ -307,7 +293,7 @@
             "type": "Microsoft.SignalRService/SignalR",
             "apiVersion": "2020-05-01",
             "name": "[variables('signalrName')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "tags": {
                 "ENV": "v0.3"
             },
@@ -337,7 +323,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2020-08-01",
             "name": "[variables('portalSiteName')]",
-            "location": "[variables('iotHubLocation')]",
+            "location": "[parameters('rgLocation')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
