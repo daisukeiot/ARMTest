@@ -42,7 +42,6 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "linkedTemplate",
-            "location": "[variables('rgLocation')]",
             "resourceGroup" :"[variables('rgName')]",
             "properties": {
                 "mode": "Incremental",
@@ -53,6 +52,12 @@
                 "parameters": {
                     "iotHubName" :  {"value" : "[variables('iotHubName')]"},
                     "iotHubLocation" :  {"value" : "[variables('rgLocation')]"}
+                },
+                "outputs" : {
+                    "test123": {
+                        "type": "String",
+                        "value": "[uri(deployment().properties.templateLink.uri, 'iothub.json')]"
+                    }
                 }
             }
         }
