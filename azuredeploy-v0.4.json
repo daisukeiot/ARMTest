@@ -100,7 +100,8 @@
 					"apiVersion": "2017-04-01",
 					"name": "[concat(variables('eventHubsNameSpace'), '/GlobalSendOnlyRule')]",
 					"dependsOn": [
-						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]"
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]",
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'), 'AuthorizationRules/RootManageSharedAccessKey')]"
 					],
 					"properties": {
 						"rights": [
@@ -114,7 +115,8 @@
 					"name": "[variables('eventHubName')]",
 					"location": "[variables('iotHubLocation')]",
 					"dependsOn": [
-						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]"
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]",
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'), 'AuthorizationRules/GlobalSendOnlyRule')]"
 					],
 					"properties": {
 						"messageRetentionInDays": 1,

@@ -51,7 +51,8 @@
 		"iotHubEventGridTopic": "EventGridIoTHubTopic",
 		"eventHubsNameSpace": "[concat('EventHubs-', take(uniqueString(resourceGroup().id),5))]",
 		"eventHubName": "devicetelemetryhub",
-		"eventHubFunctionConsumerGroupName": "telemetry-cg",
+		"eventHubFunctionConsumerGroupName": "telemetry-functions-cg",
+		"eventHubTsiConsumerGroupName": "telemetry-tsi-cg",
 		"functionAppName": "[concat('Functions-', take(uniqueString(resourceGroup().id),5))]",
 		"hostingPlanName": "[concat('HostingPlan-', take(uniqueString(resourceGroup().id),5))]",
 		"storageAccountName": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5)))]",
@@ -99,7 +100,8 @@
 					"apiVersion": "2017-04-01",
 					"name": "[concat(variables('eventHubsNameSpace'), '/GlobalSendOnlyRule')]",
 					"dependsOn": [
-						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]"
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]",
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'), 'AuthorizationRules/RootManageSharedAccessKey')]"
 					],
 					"properties": {
 						"rights": [
@@ -113,7 +115,8 @@
 					"name": "[variables('eventHubName')]",
 					"location": "[variables('iotHubLocation')]",
 					"dependsOn": [
-						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]"
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]",
+						"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'), 'AuthorizationRules/GlobalSendOnlyRule')]"
 					],
 					"properties": {
 						"messageRetentionInDays": 1,
@@ -150,6 +153,16 @@
 							"type": "consumergroups",
 							"apiVersion": "2017-04-01",
 							"name": "[variables('eventHubFunctionConsumerGroupName')]",
+							"dependsOn": [
+								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'), '/eventhubs/', variables('eventHubName'))]",
+								"[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySendRule')]"
+							],
+							"properties": {}
+						},
+						{
+							"type": "consumergroups",
+							"apiVersion": "2017-04-01",
+							"name": "[variables('eventHubTsiConsumerGroupName')]",
 							"dependsOn": [
 								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'), '/eventhubs/', variables('eventHubName'))]",
 								"[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySendRule')]"
@@ -394,7 +407,7 @@
 						},
 						{
 							"name": "EVENTHUB_CS",
-							"value": "[concat('Endpoint=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.endpoint, ';SharedAccessKeyName=iothubowner;SharedAccessKey=', listKeys(resourceId('Microsoft.Devices/IotHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).value[0].primaryKey, ';EntityPath=', reference(resourceId('Microsoft.Devices/IoTHubs', variables('iotHubName')), providers('Microsoft.Devices', 'IoTHubs').apiVersions[0]).eventHubEndpoints.events.path)]"
+							"value": "[listKeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'),variables('eventHubName'),'TelemetryListenRule'),'2017-04-01').primaryConnectionString]"
 						},
 						{
 							"name": "AzureSignalRConnectionString",
