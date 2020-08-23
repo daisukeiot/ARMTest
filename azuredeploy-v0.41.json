@@ -107,7 +107,7 @@
 						{
 							"type": "authorizationRules",
 							"apiVersion": "2017-04-01",
-							"name": "TelemetryRead",
+							"name": "TelemetryListenRule",
 							"dependsOn": [
 								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'),'/eventhubs/',variables('eventHubName'))]"
 							],
@@ -120,7 +120,7 @@
 						{
 							"type": "authorizationRules",
 							"apiVersion": "2017-04-01",
-							"name": "TelemetrySend",
+							"name": "TelemetrySendRule",
 							"dependsOn": [
 								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'),'/eventhubs/',variables('eventHubName'))]"
 							],
@@ -160,7 +160,9 @@
 				"type": "None"
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]"
+				"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'),'/eventhubs/',variables('eventHubName'))]",
+				"[concat('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'),variables('eventHubName'), 'TelemetrySendRule')]"
+
 			],
 			"properties": {
 				"ipFilterRules": [],
