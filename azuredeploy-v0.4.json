@@ -113,6 +113,19 @@
 							],
 							"properties": {
 								"rights": [
+									"Read"
+								]
+							}
+						},
+						{
+							"type": "authorizationRules",
+							"apiVersion": "2017-04-01",
+							"name": "TelemetrySend",
+							"dependsOn": [
+								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'),'/eventhubs/',variables('eventHubName'))]"
+							],
+							"properties": {
+								"rights": [
 									"Send"
 								]
 							}
@@ -163,7 +176,7 @@
 						"serviceBusTopics": [],
 						"eventHubs": [
 							{
-								"connectionString": "[listKeys(resourceId('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'),'/AuthorizationRules/RootManageSharedAccessKey/'),'2017-04-01').primaryConnectionString]",
+								"connectionString": "[listKeys(resourceId('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySend'),'2017-04-01').primaryConnectionString]",
 								"name": "DeviceTelemetryEventEndpoint"
 							}
 						],
