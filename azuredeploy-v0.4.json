@@ -107,7 +107,7 @@
 						{
 							"type": "authorizationRules",
 							"apiVersion": "2017-04-01",
-							"name": "TelemetryRead",
+							"name": "TelemetryListenRule",
 							"dependsOn": [
 								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'),'/eventhubs/',variables('eventHubName'))]"
 							],
@@ -120,7 +120,7 @@
 						{
 							"type": "authorizationRules",
 							"apiVersion": "2017-04-01",
-							"name": "TelemetrySend",
+							"name": "TelemetrySendRule",
 							"dependsOn": [
 								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'),'/eventhubs/',variables('eventHubName'))]"
 							],
@@ -135,7 +135,8 @@
 							"apiVersion": "2017-04-01",
 							"name": "[variables('eventHubFunctionConsumerGroupName')]",
 							"dependsOn": [
-								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'), '/eventhubs/', variables('eventHubName'))]"
+								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'), '/eventhubs/', variables('eventHubName'))]",
+								"[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySendRule')]"
 							],
 							"properties": {}
 						}
@@ -160,7 +161,7 @@
 				"type": "None"
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsNameSpace'))]"
+				"[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySendRule')]"
 			],
 			"properties": {
 				"ipFilterRules": [],
@@ -174,7 +175,12 @@
 					"endpoints": {
 						"serviceBusQueues": [],
 						"serviceBusTopics": [],
-						"eventHubs": [],
+						"eventHubs": [
+							{
+								"connectionString": "[listKeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'),variables('eventHubName'),'TelemetrySendRule'),'2017-04-01').primaryConnectionString]",
+								"name": "DeviceTelemetryEventEndpoint"
+							}
+						],
 						"storageContainers": []
 					},
 					"routes": [
@@ -202,6 +208,15 @@
 							"condition": "true",
 							"endpointNames": [
 								"events"
+							],
+							"isEnabled": true
+						},
+						{
+							"name": "DeviceTelemetryToEventHubs",
+							"source": "DeviceMessages",
+							"condition": "true",
+							"endpointNames": [
+								"DeviceTelemetryEventEndpoint"
 							],
 							"isEnabled": true
 						}
