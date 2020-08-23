@@ -162,10 +162,6 @@
 						"serviceBusQueues": [],
 						"serviceBusTopics": [],
 						"eventHubs": [
-							{
-								"connectionString": "[listKeys(concat('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'),'/AuthorizationRules/RootManageSharedAccessKey/'),'2017-04-01').primaryConnectionString]",
-								"name": "DeviceTelemetryEventEndpoint"
-							}
 						],
 						"storageContainers": []
 					},
@@ -519,6 +515,10 @@
 		"_SignalR_Name": {
 			"type": "String",
 			"value": "[variables('signalrName')]"
+		},
+		"_EventHubCS":{
+			"type": "String",
+			"value" : "[listKeys(concat('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'),'/AuthorizationRules/RootManageSharedAccessKey/'),'2017-04-01').primaryConnectionString]"
 		}
 	}
 }
