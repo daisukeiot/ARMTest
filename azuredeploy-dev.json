@@ -209,7 +209,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2020-08-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('functionAppName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -261,8 +261,8 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2020-08-01",
-                    "name": "functiongit",
+                    "apiVersion": "2020-06-01",
+                    "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('functionAppName'))]"
                     ],
@@ -306,7 +306,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2020-08-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('portalSiteName')]",
             "location": "[variables('iotHubLocation')]",
             "dependsOn": [
@@ -334,8 +334,8 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2020-08-01",
-                    "name": "portalgit",
+                    "apiVersion": "2020-06-01",
+                    "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites', variables('portalSiteName'))]"
                     ],
@@ -353,7 +353,7 @@
             "name": "[concat(variables('iotHubEventGridTopic'), '/PortalIoTHubEventSubscription')]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]",
-                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'portalgit')]"
+                "[resourceId('Microsoft.Web/Sites/sourcecontrols/', variables('portalSiteName'),'web')]"
             ],
             "properties": {
                 "destination": {
