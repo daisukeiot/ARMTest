@@ -113,7 +113,7 @@
 							],
 							"properties": {
 								"rights": [
-									"Read"
+									"Listen"
 								]
 							}
 						},
@@ -174,12 +174,7 @@
 					"endpoints": {
 						"serviceBusQueues": [],
 						"serviceBusTopics": [],
-						"eventHubs": [
-							{
-								"connectionString": "[listKeys(resourceId('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySend'),'2017-04-01').primaryConnectionString]",
-								"name": "DeviceTelemetryEventEndpoint"
-							}
-						],
+						"eventHubs": [],
 						"storageContainers": []
 					},
 					"routes": [
@@ -207,15 +202,6 @@
 							"condition": "true",
 							"endpointNames": [
 								"events"
-							],
-							"isEnabled": true
-						},
-						{
-							"name": "DeviceTelemetryToEventHubs",
-							"source": "DeviceMessages",
-							"condition": "true",
-							"endpointNames": [
-								"DeviceTelemetryEventEndpoint"
 							],
 							"isEnabled": true
 						}
