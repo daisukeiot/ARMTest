@@ -152,6 +152,7 @@
 							"apiVersion": "2017-04-01",
 							"name": "[variables('eventHubFunctionConsumerGroupName')]",
 							"dependsOn": [
+								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'), '/eventhubs/', variables('eventHubName'))]",
 								"[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySendRule')]"
 							],
 							"properties": {}
@@ -161,6 +162,7 @@
 							"apiVersion": "2017-04-01",
 							"name": "[variables('eventHubTsiConsumerGroupName')]",
 							"dependsOn": [
+								"[concat('Microsoft.EventHub/namespaces/', variables('eventHubsNameSpace'), '/eventhubs/', variables('eventHubName'))]",
 								"[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'), variables('eventHubName'), 'TelemetrySendRule')]"
 							],
 							"properties": {}
