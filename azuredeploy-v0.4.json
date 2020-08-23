@@ -163,7 +163,7 @@
 						"serviceBusTopics": [],
 						"eventHubs": [
 							{
-								"connectionString": "[concat('Endpoint=sb://eventhubs-ky4ce.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_', variables('iotHubName'), ';SharedAccessKey=****;EntityPath=devicetelemetryhub')]",
+								"connectionString": "[listKeys(concat('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'),'/AuthorizationRules/RootManageSharedAccessKey/'),'2017-04-01').primaryConnectionString]",
 								"name": "DeviceTelemetryEventEndpoint"
 							}
 						],
