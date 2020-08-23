@@ -163,7 +163,7 @@
 						"serviceBusTopics": [],
 						"eventHubs": [
 							{
-								"connectionString": "[listKeys(concat('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'),'/AuthorizationRules/RootManageSharedAccessKey/'),'2017-04-01').primaryConnectionString]",
+								"connectionString": "[listKeys(resourceId('Microsoft.EventHub/namespaces/',variables('eventHubsNameSpace'),'/AuthorizationRules/RootManageSharedAccessKey/'),'2017-04-01').primaryConnectionString]",
 								"name": "DeviceTelemetryEventEndpoint"
 							}
 						],
