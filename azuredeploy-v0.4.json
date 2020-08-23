@@ -51,7 +51,7 @@
 		"iotHubEventGridTopic": "EventGridIoTHubTopic",
 		"eventHubsNameSpace": "[concat('EventHubs-', take(uniqueString(resourceGroup().id),5))]",
 		"eventHubName": "devicetelemetryhub",
-		"eventHubFunctionConsumerGroupName": "telemetry-cg",
+		"eventHubFunctionConsumerGroupName": "telemetry-functions-cg",
 		"functionAppName": "[concat('Functions-', take(uniqueString(resourceGroup().id),5))]",
 		"hostingPlanName": "[concat('HostingPlan-', take(uniqueString(resourceGroup().id),5))]",
 		"storageAccountName": "[toLower(concat('stor', take(uniqueString(resourceGroup().id),5)))]",
