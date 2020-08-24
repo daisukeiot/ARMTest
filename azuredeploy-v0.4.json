@@ -22,7 +22,7 @@
 			}
 		},
 		"PortalRepoBranch": {
-			"defaultValue": "master",
+			"defaultValue": "v0.4",
 			"type": "String",
 			"metadata": {
 				"description": "The branch of the GitHub repository to use."
@@ -36,7 +36,7 @@
 			}
 		},
 		"FunctionRepoBranch": {
-			"defaultValue": "master",
+			"defaultValue": "v0.4",
 			"type": "String",
 			"metadata": {
 				"description": "The branch of the GitHub repository to use."
@@ -206,7 +206,7 @@
 						"eventHubs": [
 							{
 								"connectionString": "[listKeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubsNameSpace'),variables('eventHubName'),'TelemetrySendRule'),'2017-04-01').primaryConnectionString]",
-								"name": "DeviceTelemetryEventEndpoint"
+								"name": "DeviceTelemetryToEventHub-EP"
 							}
 						],
 						"storageContainers": []
@@ -244,7 +244,7 @@
 							"source": "DeviceMessages",
 							"condition": "true",
 							"endpointNames": [
-								"DeviceTelemetryEventEndpoint"
+								"DeviceTelemetryToEventHub-EP"
 							],
 							"isEnabled": true
 						}
