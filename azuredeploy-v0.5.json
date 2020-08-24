@@ -71,7 +71,7 @@
 			"name": "[variables('eventHubsNameSpace')]",
 			"location": "[variables('iotHubLocation')]",
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"sku": {
 				"name": "Standard",
@@ -177,7 +177,7 @@
 			"name": "[variables('iotHubName')]",
 			"location": "[variables('iotHubLocation')]",
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"sku": {
 				"name": "S1",
@@ -296,7 +296,7 @@
 				"[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
 			],
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"sku": {
 				"name": "S1",
@@ -323,7 +323,7 @@
 				"[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
 			],
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"properties": {
 				"source": "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
@@ -336,12 +336,12 @@
 			"name": "[variables('storageAccountName')]",
 			"location": "[variables('iotHubLocation')]",
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"sku": {
 				"name": "Standard_LRS"
 			},
-			"kind": "Storage"
+			"kind": "StorageV2"
 		},
 		{
 			"type": "Microsoft.Web/serverfarms",
@@ -349,7 +349,7 @@
 			"name": "[variables('hostingPlanName')]",
 			"location": "[variables('iotHubLocation')]",
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"sku": {
 				"name": "S1"
@@ -375,7 +375,7 @@
 				"[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
 			],
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"kind": "functionapp",
 			"properties": {
@@ -436,7 +436,7 @@
 			"name": "[variables('signalrName')]",
 			"location": "[variables('iotHubLocation')]",
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"sku": {
 				"name": "Standard_S1",
@@ -469,7 +469,7 @@
 				"[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
 			],
 			"tags": {
-				"ENV": "v0.4"
+				"ENV": "v0.5"
 			},
 			"properties": {
 				"serverFarmId": "[variables('hostingPlanName')]",
