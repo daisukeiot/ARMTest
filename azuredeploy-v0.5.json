@@ -73,11 +73,7 @@
 			"name": "[variables('ehNameSpace')]",
 			"location": "[variables('hubLocation')]",
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"sku": {
 				"name": "Standard",
@@ -183,11 +179,7 @@
 			"name": "[variables('hubName')]",
 			"location": "[variables('hubLocation')]",
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"sku": {
 				"name": "S1",
@@ -306,11 +298,7 @@
 				"[resourceId('Microsoft.Devices/IotHubs', variables('hubName'))]"
 			],
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"sku": {
 				"name": "S1",
@@ -337,11 +325,7 @@
 				"[resourceId('Microsoft.Devices/IotHubs', variables('hubName'))]"
 			],
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"properties": {
 				"source": "[resourceId('Microsoft.Devices/IotHubs', variables('hubName'))]",
@@ -354,11 +338,7 @@
 			"name": "[variables('storageAccountName')]",
 			"location": "[variables('hubLocation')]",
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"sku": {
 				"name": "Standard_LRS"
@@ -371,11 +351,7 @@
 			"name": "[variables('hostingPlanName')]",
 			"location": "[variables('hubLocation')]",
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"sku": {
 				"name": "S1"
@@ -401,11 +377,7 @@
 				"[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
 			],
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"kind": "functionapp",
 			"properties": {
@@ -466,11 +438,7 @@
 			"name": "[variables('signalrName')]",
 			"location": "[variables('hubLocation')]",
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"sku": {
 				"name": "Standard_S1",
@@ -503,11 +471,7 @@
 				"[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
 			],
 			"tags": {
-<<<<<<< HEAD
 				"ENV": "[variables('envTag')]"
-=======
-				"ENV": "v0.5"
->>>>>>> 0470587988df3eee894d869470e5f6f4eae8eacf
 			},
 			"properties": {
 				"serverFarmId": "[variables('hostingPlanName')]",
