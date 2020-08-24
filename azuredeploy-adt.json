@@ -32,6 +32,20 @@
                 "description": "Region"
             }
         },
+        "EventHubsName": {
+            "defaultValue": "[concat('EventHubs-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of Event Hubs.  Must be globally unique."
+            }
+        },
+        "TsiName": {
+            "defaultValue": "[concat('Tsi-', take(uniqueString(resourceGroup().id),5))]",
+            "type": "String",
+            "metadata": {
+                "description": "The name of Time Series Insight.  Must be globally unique."
+            }
+        },
         "PortalSiteName": {
             "defaultValue": "IoTPnPADT-Demo",
             "type": "String",
@@ -102,6 +116,8 @@
         "consumerGroupName": "[concat(parameters('IotHubName'), '/events/telemetry-cg')]",
         "iotHubPolicyName": "iothubowner",
         "iotHubEventGridTopic": "EventGridIoTHubTopic",
+        "eventHubsName" : "[parameters('EventHubsName')]",
+        "tsiName" : "[parameters('TsiName')]",
         "functionAppName": "[parameters('FunctionsName')]",
         "hostingPlanName": "[parameters('HostingPlanName')]",
         "storageAccountName": "[parameters('StorageAccountName')]",
@@ -110,7 +126,8 @@
         "PortalRepoURL": "[parameters('PortalRepoURL')]",
         "PortalRepoBranch": "[parameters('PortalRepoBranch')]",
         "FunctionRepoURL": "[parameters('FunctionRepoURL')]",
-        "FunctionRepoBranch": "[parameters('FunctionRepoBranch')]"
+        "FunctionRepoBranch": "[parameters('FunctionRepoBranch')]",
+        "Tag": "v0.4"
     },
     "resources": [
         {
@@ -119,7 +136,7 @@
             "name": "[variables('iotHubName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "sku": {
                 "name": "S1",
@@ -141,10 +158,27 @@
                     "endpoints": {
                         "serviceBusQueues": [],
                         "serviceBusTopics": [],
-                        "eventHubs": [],
+                        "eventHubs": [
+                            {
+                                "connectionString": "[concat('Endpoint=sb://cutc-eventhubs.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_', parameters('iotHubName'), ';SharedAccessKey=****;EntityPath=eventhubtsi')]",
+                                "name": "Telemetry-EventHub",
+                                "id": "b65e215f-5ac3-4f0e-899f-1e828f86901e",
+                                "subscriptionId": "8fe26a8e-ded0-4dce-83c7-efdb495f2dc3",
+                                "resourceGroup": "[resourceGroup().id]"
+                            }
+                        ],
                         "storageContainers": []
                     },
                     "routes": [
+                        {
+                            "name": "IoTHub2EventHub",
+                            "source": "DeviceMessages",
+                            "condition": "true",
+                            "endpointNames": [
+                                "Telemetry-EventHub"
+                            ],
+                            "isEnabled": true
+                        },
                         {
                             "name": "DeviceLifecycleRoute",
                             "source": "DeviceLifecycleEvents",
@@ -204,6 +238,94 @@
             }
         },
         {
+            "type": "Microsoft.Devices/provisioningServices",
+            "apiVersion": "2020-01-01",
+            "name": "[parameters('provisioningServices_CUTC_Dps_name')]",
+            "location": "[variables('iotHubLocation')]",
+            "tags": {
+                "ENV": "[variables('Tag')]"
+            },
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "state": "Active",
+                "provisioningState": "Succeeded",
+                "iotHubs": [],
+                "allocationPolicy": "Hashed"
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces",
+            "apiVersion": "2018-01-01-preview",
+            "name": "[variables('eventHubsName')]",
+            "location": "[variables('iotHubLocation')]",
+            "tags": {
+                "ENV": "[variables('Tag')]"
+            },
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "zoneRedundant": false,
+                "isAutoInflateEnabled": false,
+                "maximumThroughputUnits": 0,
+                "kafkaEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
+            "apiVersion": "2017-04-01",
+            "name": "[concat(variables('eventHubsName'), '/RootManageSharedAccessKey')]",
+            "location": "[variables('iotHubLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsName'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2017-04-01",
+            "name": "[concat(variables('eventHubsName'), '/cutc-eventhubtsi')]",
+            "location": "[variables('iotHubLocation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubsName'))]"
+            ],
+            "properties": {
+                "messageRetentionInDays": 1,
+                "partitionCount": 1,
+                "status": "Active"
+            }
+        },
+        {
+            "type": "Microsoft.TimeSeriesInsights/environments",
+            "apiVersion": "2020-05-15",
+            "name": "[parameters('tsiName')]",
+            "location": "[variables('iotHubLocation')]",
+            "sku": {
+                "name": "S1",
+                "capacity": 1
+            },
+            "tags": {
+                "ENV": "[variables('Tag')]"
+            },
+            "kind": "Gen1",
+            "properties": {
+                "dataRetentionTime": "P30D",
+                "storageLimitExceededBehavior": "PurgeOldData"
+            }
+        },
+        {
             "type": "Microsoft.Devices/iotHubs/eventhubEndpoints/ConsumerGroups",
             "apiVersion": "2018-04-01",
             "name": "[variables('consumerGroupName')]",
@@ -220,7 +342,7 @@
                 "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]"
             ],
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "properties": {
                 "source": "[resourceId('Microsoft.Devices/IotHubs', variables('iotHubName'))]",
@@ -233,7 +355,7 @@
             "name": "[variables('storageAccountName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -246,7 +368,7 @@
             "name": "[variables('hostingPlanName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "sku": {
                 "name": "S1"
@@ -272,7 +394,7 @@
                 "[resourceId('Microsoft.SignalRService/SignalR', variables('signalrName'))]"
             ],
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "kind": "functionapp",
             "properties": {
@@ -307,6 +429,10 @@
                         {
                             "name": "AzureSignalRConnectionString",
                             "value": "[concat('Endpoint=https://', toLower(variables('signalrName')), '.service.signalr.net;AccessKey=', listKeys(variables('signalrName'), providers('Microsoft.SignalRService', 'SignalR').apiVersions[0]).primaryKey)]"
+                        },
+                        {
+                            "name": "ADT_SERVICE_URL",
+                            "value": "https://ADTInstance"
                         }
                     ]
                 }
@@ -333,7 +459,7 @@
             "name": "[variables('signalrName')]",
             "location": "[variables('iotHubLocation')]",
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "sku": {
                 "name": "Standard_S1",
@@ -366,7 +492,7 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
             ],
             "tags": {
-                "ENV": "v0.3"
+                "ENV": "[variables('Tag')]"
             },
             "properties": {
                 "serverFarmId": "[variables('hostingPlanName')]",
@@ -423,6 +549,29 @@
                         "Microsoft.Devices.DeviceDeleted",
                         "Microsoft.Devices.DeviceConnected",
                         "Microsoft.Devices.DeviceDisconnected"
+                    ]
+                },
+                "labels": [],
+                "eventDeliverySchema": "EventGridSchema",
+                "retryPolicy": {
+                    "maxDeliveryAttempts": 30,
+                    "eventTimeToLiveInMinutes": 1440
+                }
+            }
+        },
+        {
+            "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[concat(variables('iotHubEventGridTopic'), '/IoTHubTelemetryEventSubscription')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventGrid/systemTopics', variables('iotHubEventGridTopic'))]"
+            ],
+            "properties": {
+                "destination": {
+                },
+                "filter": {
+                    "includedEventTypes": [
+                        "Microsoft.Devices.Telemetry"
                     ]
                 },
                 "labels": [],
