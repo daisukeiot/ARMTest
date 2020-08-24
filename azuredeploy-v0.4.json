@@ -240,7 +240,7 @@
 							"isEnabled": true
 						},
 						{
-							"name": "DeviceTelemetryToEventHubs",
+							"name": "DeviceTelemetryRoute",
 							"source": "DeviceMessages",
 							"condition": "true",
 							"endpointNames": [
